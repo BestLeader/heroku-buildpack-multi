@@ -15,7 +15,7 @@ function indent() {
 
 unset GIT_DIR
 
-printf 'https://github.com/cloudfoundry/nodejs-buildpack.git' > $1/.buildpacks
+printf 'https://github.com/cloudfoundry/nodejs-buildpack.git\nhttps://github.com/cloudfoundry/java-buildpack.git' > $1/.buildpacks
 
 for BUILDPACK in $(cat $1/.buildpacks); do
   dir=$(mktemp -t buildpackXXXXX)
