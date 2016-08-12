@@ -54,24 +54,26 @@ for BUILDPACK in $(cat $1/.buildpacks); do
 
     if [ $? == 0 ]; then
       echo "=====> Detected Framework: $framework"
-      $dir/bin/compile $1 $2 $3
-
-      if [ $? != 0 ]; then
-        exit 1
-      fi
-
-      # check if the buildpack left behind an environment for subsequent ones
-      if [ -e $dir/export ]; then
-        source $dir/export
-      fi
-
-      if [ -x $dir/bin/release ]; then
-        $dir/bin/release $1 > $1/last_pack_release.out
-      fi
+    else
+      echo "=====> Detection failed - ignoring result"
     fi
+	$dir/bin/compile $1 $2 $3
+	if [ $? != 0 ]; then
+	exit 1
+	fi
+
+	# check if the buildpack left behind an environment for subsequent ones
+	if [ -e $dir/export ]; then
+	source $dir/export
+	fi
+
+	if [ -x $dir/bin/release ]; then
+	$dir/bin/release $1 > $1/last_pack_release.out
+	fi
   fi
 done
 
 if [ -e $1/last_pack_release.out ]; then
   echo "Using release configuration from last framework ($framework)."
+  cat $1/last_pack_release.out
 fi
